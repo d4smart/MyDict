@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>单词查询页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+  </head>
+  
+  <body>
+	<form method="post" action="." class="form-search">
+	  <div class="input-append">
+	    <fieldset>
+		<legend><img src="{{ url_for('static', filename='img/accessories-dictionary1.png') }}" class="img-rounded"></legend>
+		  <br />
+		  <input type="text" name="word" class="span2 search-query" id="word1" placeholder="Input the word" autocomplete="off" data-provide="typeahead"
+			data-items="4">
+		  <button type="submit" class="btn">Search!</button>
+	    </fieldset>
+	  </div>
+	</form>
+	<br />
+	{% if types or sents %}
+		<p class="lead">单词释义：{{ types }}</p>
+		<p class="lead">例句：{{ sents }}</p>
+	{% elif error %}
+		<p class="lead">Error: {{ error }}</p>
+	{% endif %}  
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-typeahead.js') }}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+	var data = "{{ url_for('static', filename='result1.json') }}";
+	var subjects = [];
+	$.getJSON(data, function(sub){
+	$.each(sub, function(i,item){
+	if (item) {
+	subjects.push(item);
+	}
+	});
+	});
+	$('#word1').typeahead({source: subjects})
+    </script>
+  </body>
+</html>
+
